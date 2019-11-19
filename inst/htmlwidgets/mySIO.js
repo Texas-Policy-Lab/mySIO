@@ -12,18 +12,13 @@ HTMLWidgets.widget({
 
       renderValue: function(x) {
         // general chart with layers
-		if(x.layers) {
-			if(this.chart){
-				this.chart.update(x);
-			} else {
+
 				console.log(x);
 				this.chart = new chart({
 					element: document.getElementById(el.id),
 					data: x.data,
 					options: x.options
 					});
-			}
-		}
 
       },
 

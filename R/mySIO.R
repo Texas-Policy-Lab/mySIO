@@ -1,16 +1,24 @@
-#' <Add Title>
+#' Create a mySIO object
 #'
-#' <Add Description>
+#' Create's a mySIO html widget for a d3.js sunburst chart
 #'
 #' @import htmlwidgets
 #'
+#'@param data a nested data object (see d3r library)
+#'@param color a vector of colors for sunburst chart
+#'
 #' @export
-mySIO <- function(data, width = NULL, height = NULL, elementId = NULL) {
+mySIO <- function(data, categories, color = NULL, width = NULL, height = NULL, elementId = NULL) {
+
+  if(is.null(color)) color <- colorRampPalette(RColorBrewer::brewer.pal(10, 'RdYlBu'))
+
+  color <- color(length(categories))
 
   # forward options using x
   x = list(
    data = data,
-   options = options
+   options = list(color = color,
+                  names = categories)
   )
 
   # create widget

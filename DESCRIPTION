@@ -1,9 +1,9 @@
 Package: mySIO
-Title: What the Package Does (one line, title case)
+Title: Creates an html widget version of the d3.js Sunburst Chart
 Version: 0.0.0.9000
-Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Authors@R: person("Ryan", "Morton", email = "morton@myMA.us", role = c("aut", "cre"))
+Description: Creates an html widget version of the d3.js Sunburst Chart.
 Depends: R (>= 3.6.0)
-License: What license is it under?
+License: GNU v3.0
 Encoding: UTF-8
 LazyData: true
