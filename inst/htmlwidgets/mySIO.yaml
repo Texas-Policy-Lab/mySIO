@@ -1,7 +1,10 @@
-# (uncomment to add a dependency)
-# dependencies:
-#  - name:
-#    version:
-#    src:
-#    script:
-#    stylesheet:
+dependencies:
+- name: d3
+  version: 5.10.0
+  src: htmlwidgets/lib
+  script: ./d3.min.js
+- name: mySunburst
+  version: 0.1.0
+  src: htmlwidgets/sunburst
+  script: ./mySunburst.js
+  stylesheet: ./style.css

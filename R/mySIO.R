@@ -5,11 +5,12 @@
 #' @import htmlwidgets
 #'
 #' @export
-mySIO <- function(message, width = NULL, height = NULL, elementId = NULL) {
+mySIO <- function(data, width = NULL, height = NULL, elementId = NULL) {
 
   # forward options using x
   x = list(
-    message = message
+   data = data,
+   options = options
   )
 
   # create widget
