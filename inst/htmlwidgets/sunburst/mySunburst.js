@@ -23,10 +23,22 @@ class chart {
 		    .style("font", "10px sans-serif");
 
 		this.g = this.svg.append("g")
-		    .attr("transform", `translate(${width / 2},${width / 2})`);
+		    .attr("transform", `translate(${width / 2},${width / 2})`)
+			.on('mouseleave', mouseleave);
 		  
 		this.updateChart(this.data);
 		this.updateLegend();
+		
+		function mouseleave(d) {
+
+		  d3.selectAll("path")
+			  .transition()
+			  .duration(200)
+			  .style("opacity", 1)
+			  .on("end", function() {
+					  d3.select(this).on("mouseover", mouseover);
+					});
+		}
 	
 	}
 	
@@ -58,11 +70,12 @@ class chart {
 				.attr("fill", d => { while (d.depth > 1) d = d.parent; return color(d.data.name); })
 				.attr("fill-opacity", d => arcVisible(d.current) ? (d.children ? 0.6 : 0.4) : 0)
 				.attr('class', d =>  'path' + d.data.name)
-			  .attr("d", d => arc(d.current));
+			    .attr("d", d => arc(d.current))
+				.on("click", clicked)
+				.on('mouseover', mouseover);
 
 	    path.filter(d => d.children)
-		    .style("cursor", "pointer")
-		    .on("click", clicked);
+		    .style("cursor", "pointer");
 		
 		const parent = this.g.append("circle")
 		  .datum(root)
@@ -97,6 +110,23 @@ class chart {
 				.attrTween("d", d => () => arc(d.current));
 			
 		  }
+		  
+		  function mouseover(d){
+
+			var sequenceArray = d.ancestors().reverse();
+			sequenceArray.shift(); // remove root node from the array
+			// Fade all the segments.
+			d3.selectAll("path")
+				.style("opacity", 0.3);
+
+			// Then highlight only those that are an ancestor of the current segment.
+			d3.selectAll("path")
+				.filter(function(node) {
+						  return (sequenceArray.indexOf(node) >= 0);
+						})
+				.style("opacity", 1);
+		  }
+		  
 	}
 	
 	updateLegend(){
