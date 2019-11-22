@@ -10,7 +10,7 @@
 #' @export
 mySIO <- function(data, categories, color = NULL, width = NULL, height = NULL, elementId = NULL) {
 
-  if(is.null(color)) color <- colorRampPalette(RColorBrewer::brewer.pal(10, 'RdYlBu'))
+  if(is.null(color)) color <- colorRampPalette(RColorBrewer::brewer.pal(min(10, length(categories)), 'RdYlBu'))
 
   color <- color(length(categories))
 

@@ -3,11 +3,13 @@ path {
 }
 
 .sequence {
-  /*width: 600px;*/
-  height: 70px;
+	float: right;
+	width: 25%
 }
-
+text.trail {
+	color: gray;
+}
 .chart {
-  position: relative;
   float: left;
+  width: 75%;
 }
