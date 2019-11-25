@@ -51,7 +51,7 @@ server <- function(input, output) {
      )
 
      tree <- d3_nest(dat, value_cols = 'size')
-     mySIO(data = tree, categories =  c("a", "b", dat$level2), width = "650px")
+     mySIO(data = tree, categories =  c("a", "b", dat$level2), grouper = "mine", width = "650px")
    })
 
    output$second <- renderMySIO({
@@ -63,7 +63,7 @@ server <- function(input, output) {
      )
 
      tree <- d3_nest(dat, value_cols = 'size')
-     mySIO(data = tree, categories =  c("a", "b", dat$level2), width = "650px")
+     mySIO(data = tree, categories =  c("a", "b", dat$level2), grouper = "mine",width = "650px")
    })
 }
 

@@ -8,7 +8,7 @@
 #'@param color a vector of colors for sunburst chart
 #'
 #' @export
-mySIO <- function(data, categories, color = NULL, width = NULL, height = NULL, elementId = NULL) {
+mySIO <- function(data, categories, grouper = NULL, color = NULL, width = NULL, height = NULL, elementId = "mySIOchart") {
 
   if(is.null(color)) color <- colorRampPalette(RColorBrewer::brewer.pal(min(10, length(categories)), 'RdYlBu'))
 
@@ -18,7 +18,8 @@ mySIO <- function(data, categories, color = NULL, width = NULL, height = NULL, e
   x = list(
    data = data,
    options = list(color = color,
-                  names = categories)
+                  names = categories),
+   grouper = grouper
   )
 
   # create widget

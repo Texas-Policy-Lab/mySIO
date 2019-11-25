@@ -5,6 +5,7 @@ class chart {
   	    this.element = opts.element;
 	    this.data = opts.data;
 	    this.options = opts.options;
+		this.grouper = opts.grouper;
 	    this.draw();
     }
 	
@@ -23,7 +24,7 @@ class chart {
 		this.element.innerHTML = '';
 		this.svg = d3.select(this.element).append('svg')
 			.attr('id', 'chart-' + this.element.id)
-			.attr('class', 'chart')
+			.attr('class', this.grouper ? this.grouper : 'chart')
 		    .attr("viewBox", [0, 0, this.width, this.width])
 			//.on('mouseover', mouseleave)
 		    .style("font", "10px sans-serif");
