@@ -44,7 +44,7 @@ server <- function(input, output) {
 
    output$first <- renderMySIO({
      dat <- data.frame(
-       level1 = rep(c("a", "b"), each=3),
+       level1 = rep(c("about a very young person", "better get back to basics"), each=3),
        level2 = paste0(rep(c("a", "b"), each=3), 1:3),
        size = c(10,5,2,3,8,6),
        stringsAsFactors = FALSE
@@ -56,7 +56,7 @@ server <- function(input, output) {
 
    output$second <- renderMySIO({
      dat <- data.frame(
-       level1 = rep(c("a", "b"), each=3),
+       level1 = rep(c("about a very young person", "better get back to basics"), each=3),
        level2 = paste0(rep(c("a", "b"), each=3), 1:3),
        size = c(13,2,6,8,1,3),
        stringsAsFactors = FALSE

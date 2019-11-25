@@ -22,7 +22,7 @@ class chart {
 	 
 		this.element.innerHTML = '';
 		this.svg = d3.select(this.element).append('svg')
-			.attr('id', 'chart' + this.element.id)
+			.attr('id', 'chart-' + this.element.id)
 			.attr('class', 'chart')
 		    .attr("viewBox", [0, 0, this.width, this.width])
 			//.on('mouseover', mouseleave)
@@ -32,112 +32,11 @@ class chart {
 		    .attr("transform", `translate(${width / 2},${width / 2})`);
 		
 		this.sequence = d3.select(this.element).append('svg')
-			.attr('id', 'sequence' + this.element.id)
+			.attr('id', 'sequence-' + this.element.id)
+			.attr('height', this.height)
 			.attr('class', 'sequence');
 		  
 		this.updateChart(this.data);
-		
-		function mouseover(d){
-
-			var sequenceArray = d.ancestors().reverse();
-			sequenceArray.shift(); // remove root node from the array
-			// Fade all the segments.
-			d3.selectAll("path")
-				.style("opacity", 0.4);
-
-			// Then highlight only those that are an ancestor of the current segment.
-			d3.selectAll("path")
-				.filter(function(node) {
-						  return (sequenceArray.indexOf(node) >= 0);
-						})
-				.style("opacity", 1);
-			
-			var sequenceArray2 = getAncestors(d);
-			updateBreadcrumbs(sequenceArray2, that.parentSize);
-			}
-			
-		function mouseleave(d) {
-				// Hide the breadcrumb trail
-				d3.selectAll(".trail")
-				  .style("visibility", "hidden");
-
-				d3.selectAll("path")
-				  .transition()
-				  .duration(200)
-				  .style("opacity", 1)
-				  .on("end", function() {
-						  d3.select(this).on("mouseover", mouseover);
-						});
-				}
-
-		function updateBreadcrumbs(nodeArray, totalSize) {
-	
-				var b = {
-				w: 125, h: 65, s: 3, t: 10
-				};
-			  d3.selectAll('.trail').remove();
-			  
-			  var percentFormat = d3.format(",.1%")	
-			  // Data join; key function combines name and depth (= position in sequence).
-			  var g = d3.selectAll(".sequence")
-				  .selectAll(".trail")
-				  .data(nodeArray);
-				  
-			  // Add breadcrumb and label for entering nodes.
-			  var entering = g.enter()
-				.append("svg:g")
-				.attr('class', 'trail');
-
-				entering.append("svg:rect")
-				  //.attr("points", breadcrumbPoints)
-				  .attr('y',5)
-				  .attr('width', '125px')
-				  .attr('height', '65')
-				  .attr('rx', 15)
-				  .attr('ry', 15)
-				  .style('fill', 'none')
-				  //.style('border-radius', 5)
-				  .style('stroke-width', 4)
-				  .style("stroke", d => color(d.data.name))
-				  .style('fill', d => color(d.data.name))
-				  .style('fill-opacity', 0.4);
-
-				entering.append("svg:text")
-				  .attr("x", b.t)
-				  .attr("y", 15)
-				  .attr("dy", "0.35em")
-				  .attr('font-weight', 'bold')
-				  .attr("text-anchor", "start")
-				  .text(function(d) { return d.data.name; });
-				
-				entering.append("svg:text")
-					  .attr("x", b.t)
-					  .attr("y", 30)
-					  .attr("dy", "0.35em")
-					  .attr("text-anchor", "start")
-					  .text(d=> 'Count: ' + d.value);
-				
-				entering.append("svg:text")
-					  .attr("x", b.t)
-					  .attr("y", 45)
-					  .attr("dy", "0.35em")
-					  .attr("text-anchor", "start")
-					  .text(function(d) { return 'Percent: ' + percentFormat(d.value / totalSize); });
-
-			  // Set position for entering and updating nodes.
-			  entering.attr("transform", function(d, i) {
-				return "translate(5, " + i * (b.h + b.s + 4 ) + ")";
-			  });
-
-			  // Remove exiting nodes.
-			  g.exit().remove();
-
-
-			  // Make the breadcrumb trail visible, if it's hidden.
-			  d3.select(".sequence")
-				  .style("visibility", "");
-
-			}	
 		
 	}
 	
@@ -226,7 +125,7 @@ class chart {
 			
 		  }
 		  
-		  function mouseover(d){
+		function mouseover(d){
 
 			var sequenceArray = d.ancestors().reverse();
 			sequenceArray.shift(); // remove root node from the array
@@ -246,11 +145,12 @@ class chart {
 						  return (sequenceNames.indexOf(node.data.name)>= 0);
 						})
 				.style("opacity", 1);
+				
 			
-			var sequenceArray2 = getAncestors(d);
-			updateBreadcrumbs(sequenceArray2, that.parentSize);
+			
+			updateBreadcrumbs(sequenceNames);
 			}
-			function mouseleave(d) {
+		function mouseleave(d) {
 				// Hide the breadcrumb trail
 				d3.selectAll(".trail")
 				  .style("visibility", "hidden");
@@ -264,29 +164,75 @@ class chart {
 						});
 				}
 			
-			function updateBreadcrumbs(nodeArray, totalSize) {
+		function updateBreadcrumbs(nodeArray) {
 	
-				var b = {
+			var b = {
 				w: 125, h: 65, s: 3, t: 10
 				};
-			  d3.selectAll('.trail').remove();
+			
+			d3.selectAll('.trail').remove();
 			  
-			  var percentFormat = d3.format(",.1%")	
-			  // Data join; key function combines name and depth (= position in sequence).
-			  var g = d3.selectAll(".sequence")
-				  .selectAll(".trail")
-				  .data(nodeArray);
+			var percentFormat = d3.format(",.1%")
+			  
+			  d3.selectAll(".chart")._groups[0].forEach(function(d){
 				  
+				  var ids = d.id.split("-")[1];
+				  console.log(ids);
+				  
+				  var svg = d3.select('#' + d.id);
+				
+				  
+				  var sequenceData = svg.selectAll("path")
+					.filter(function(node) {
+						  return (nodeArray.indexOf(node.data.name)>= 0);
+						})
+					.data()
+				
+				console.log(d3.select("#sequence-" + ids));
+				
+				var g = d3.select("#sequence-" + ids)
+				  .selectAll(".trail")
+				  .data(sequenceData);
+
 			  // Add breadcrumb and label for entering nodes.
 			  var entering = g.enter()
 				.append("svg:g")
 				.attr('class', 'trail');
-
+			console.log(entering);
+				var textCat = entering.append("svg:text")
+				  .attr("x", (b.w + b.t)/2 )
+				  .attr("y", 15)
+				  .attr("dy", "0.35em")
+				  //.attr('font-weight', 'bold')
+				  .attr("text-anchor", "start")
+				  .text(function(d) { return d.data.name; })
+				  .call(wrap, 100);
+				
+				var textCatBB =  textCat.node().getBBox();
+				console.log(textCatBB);
+				
+				entering.append("svg:text")
+					  .attr("x", b.t)
+					  .attr("y", textCatBB.height + 25)
+					  //.attr("dy", "0.35em")
+					  .attr("text-anchor", "start")
+					  .text(d=> 'Count: ' + d.value);
+				/*
+				entering.append("svg:text")
+					  .attr("x", b.t)
+					  .attr("y", textCatBB.height + 35)
+					  .attr("dy", "0.35em")
+					  .attr("text-anchor", "start")
+					  .text(function(d) { return 'Percent: ' + percentFormat(d.value / totalSize); });
+				 */ 
+				var textBB =  entering.node().getBBox();
+				console.log(textBB);
+				
 				entering.append("svg:rect")
 				  //.attr("points", breadcrumbPoints)
 				  .attr('y',5)
-				  .attr('width', '125px')
-				  .attr('height', '65')
+				  .attr('width', 125)
+				  .attr('height', textBB.height + 10)
 				  .attr('rx', 15)
 				  .attr('ry', 15)
 				  .style('fill', 'none')
@@ -295,32 +241,10 @@ class chart {
 				  .style("stroke", d => color(d.data.name))
 				  .style('fill', d => color(d.data.name))
 				  .style('fill-opacity', 0.4);
-
-				entering.append("svg:text")
-				  .attr("x", b.t)
-				  .attr("y", 15)
-				  .attr("dy", "0.35em")
-				  .attr('font-weight', 'bold')
-				  .attr("text-anchor", "start")
-				  .text(function(d) { return d.data.name; });
 				
-				entering.append("svg:text")
-					  .attr("x", b.t)
-					  .attr("y", 30)
-					  .attr("dy", "0.35em")
-					  .attr("text-anchor", "start")
-					  .text(d=> 'Count: ' + d.value);
-				
-				entering.append("svg:text")
-					  .attr("x", b.t)
-					  .attr("y", 45)
-					  .attr("dy", "0.35em")
-					  .attr("text-anchor", "start")
-					  .text(function(d) { return 'Percent: ' + percentFormat(d.value / totalSize); });
-
 			  // Set position for entering and updating nodes.
 			  entering.attr("transform", function(d, i) {
-				return "translate(5, " + i * (b.h + b.s + 4 ) + ")";
+				return "translate(5, " + i * (textBB.height + b.s + 15 ) + ")";
 			  });
 
 			  // Remove exiting nodes.
@@ -330,6 +254,9 @@ class chart {
 			  // Make the breadcrumb trail visible, if it's hidden.
 			  d3.select(".sequence")
 				  .style("visibility", "");
+			  });
+			  
+
 
 			}
 
@@ -365,9 +292,7 @@ function getAncestors(node) {
     current = current.parent;
   }
   return path;
-}
-
-	  
+} 
 	
 function breadcrumbPoints(d, i) {
   var b = {
@@ -385,3 +310,27 @@ function breadcrumbPoints(d, i) {
   return points.join(" ");
 }
 
+function wrap(text, width) {
+  text.each(function() {
+    var text = d3.select(this),
+        words = text.text().split(/\s+/).reverse(),
+        word,
+        line = [],
+        lineNumber = 0,
+        lineHeight = 1.1, // ems
+        y = text.attr("y"),
+		x = 15,
+        dy = parseFloat(text.attr("dy")),
+        tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
+    while (word = words.pop()) {
+      line.push(word);
+      tspan.text(line.join(" "));
+      if (tspan.node().getComputedTextLength() > width) {
+        line.pop();
+        tspan.text(line.join(" "));
+        line = [word];
+        tspan = text.append("tspan").attr("x", x).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+      }
+    }
+  });
+}
