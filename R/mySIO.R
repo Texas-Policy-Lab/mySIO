@@ -8,10 +8,10 @@
 #'@param color a vector of colors for sunburst chart
 #'
 #' @export
-mySIO <- function(data, categories, grouper = NULL, color = NULL, width = NULL, height = NULL, elementId = "mySIOchart") {
+mySIO <- function(data, categories, grouper = NULL, color = NULL, width = NULL, height = NULL, elementId = NULL) {
 
   if(is.null(color)) color <- colorRampPalette(RColorBrewer::brewer.pal(min(10, length(categories)), 'RdYlBu'))
-
+  if(is.null(elementId)) elementId <- "mySIOchart"
   color <- color(length(categories))
 
   # forward options using x

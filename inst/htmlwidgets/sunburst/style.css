@@ -6,8 +6,13 @@ path {
 	float: right;
 	width: 25%
 }
+
 text.trail {
 	color: gray;
+}
+
+rect.breadRect{
+	stroke-dasharray: 0,200,100;
 }
 .chart {
   float: left;

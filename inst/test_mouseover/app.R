@@ -44,26 +44,28 @@ server <- function(input, output) {
 
    output$first <- renderMySIO({
      dat <- data.frame(
-       level1 = rep(c("about a very young person", "better get back to basics"), each=3),
-       level2 = paste0(rep(c("a", "b"), each=3), 1:3),
-       size = c(10,5,2,3,8,6),
+       level1 = rep(c("about a very young person", "better get back to basics"), each=4),
+       level2 = paste0(rep(c("a", "b"), each = 4), 1:4),
+       level3 = paste0(rep(c("c", "d"), each = 4), 1:4),
+       size = c(10,5,2,3,8,6,7,9),
        stringsAsFactors = FALSE
      )
 
      tree <- d3_nest(dat, value_cols = 'size')
-     mySIO(data = tree, categories =  c("a", "b", dat$level2), grouper = "mine", width = "650px")
+     mySIO(data = tree, categories =  c("a", "b", dat$level2, dat$level3), grouper = "mine", width = "650px")
    })
 
    output$second <- renderMySIO({
      dat <- data.frame(
-       level1 = rep(c("about a very young person", "better get back to basics"), each=3),
-       level2 = paste0(rep(c("a", "b"), each=3), 1:3),
-       size = c(13,2,6,8,1,3),
+       level1 = rep(c("about a very young person", "better get back to basics"), each=4),
+       level2 = paste0(rep(c("a", "b"), each = 4), 1:4),
+       level3 = paste0(rep(c("c", "d"), each = 4), 1:4),
+       size = c(13,2,6,8,1,3,8,12),
        stringsAsFactors = FALSE
      )
 
      tree <- d3_nest(dat, value_cols = 'size')
-     mySIO(data = tree, categories =  c("a", "b", dat$level2), grouper = "mine",width = "650px")
+     mySIO(data = tree, categories =  c("a", "b", dat$level2, dat$level3), grouper = "mine",width = "650px")
    })
 }
 

@@ -20,7 +20,9 @@ class chart {
 			.range(this.options.color);
 		
 		const width = this.width;
-	 
+		
+		console.log(this.grouper);
+		
 		this.element.innerHTML = '';
 		this.svg = d3.select(this.element).append('svg')
 			.attr('id', 'chart-' + this.element.id)
@@ -50,7 +52,7 @@ class chart {
 			.domain(this.options.names)
 			.range(this.options.color);
 		
-		const radius = this.width / 6;
+		const radius = this.width / 8;
 		
 		const arc = d3.arc()
 			.startAngle(d => d.x0)
@@ -73,14 +75,15 @@ class chart {
 
 		root.each(d => d.current = d);
 		
+		console.log(root.descendants());
 		const path = this.g.append("g")
 			.selectAll("path")
-			.data(root.descendants().slice(1))
+			.data(root.descendants())
 			.join("path")
 				.attr("fill", d => color(d.data.name))
-				.attr("fill-opacity", d => arcVisible(d.current) ? (d.children ? 0.6 : 0.4) : 0)
+				.attr("fill-opacity", d => arcVisible(d.current) ? 1 : 0)
 				.attr('class', d =>  'path' + d.data.name)
-			    .attr("d", d => arc(d.current))
+			    .attr("d", arc)
 				//.on("click", clicked)
 				.on('mouseover', mouseover);
 
@@ -89,6 +92,7 @@ class chart {
 		
 		const parent = this.g.append("circle")
 		  .datum(root)
+		  .attr('class', 'parent-node')
 		  .attr("r", radius)
 		  .attr("fill", "none")
 		  .attr("pointer-events", "all")
@@ -177,19 +181,19 @@ class chart {
 			  
 			  d3.selectAll(".chart")._groups[0].forEach(function(d){
 				  
-				  var ids = d.id.split("-")[1];
-				  console.log(ids);
+				var ids = d.id.split("-")[1];
+				console.log(ids);
 				  
-				  var svg = d3.select('#' + d.id);
-				
+				var svg = d3.select('#' + d.id);
 				  
-				  var sequenceData = svg.selectAll("path")
+				var parentData = svg.selectAll('.parent-node').node().__data__.value;
+				console.log(parentData);
+				 
+				var sequenceData = svg.selectAll("path")
 					.filter(function(node) {
 						  return (nodeArray.indexOf(node.data.name)>= 0);
 						})
 					.data()
-				
-				console.log(d3.select("#sequence-" + ids));
 				
 				var g = d3.select("#sequence-" + ids)
 				  .selectAll(".trail")
@@ -199,7 +203,7 @@ class chart {
 			  var entering = g.enter()
 				.append("svg:g")
 				.attr('class', 'trail');
-			console.log(entering);
+
 				var textCat = entering.append("svg:text")
 				  .attr("x", (b.w + b.t)/2 )
 				  .attr("y", 15)
@@ -210,7 +214,6 @@ class chart {
 				  .call(wrap, 100);
 				
 				var textCatBB =  textCat.node().getBBox();
-				console.log(textCatBB);
 				
 				entering.append("svg:text")
 					  .attr("x", b.t)
@@ -218,29 +221,29 @@ class chart {
 					  //.attr("dy", "0.35em")
 					  .attr("text-anchor", "start")
 					  .text(d=> 'Count: ' + d.value);
-				/*
+			
 				entering.append("svg:text")
 					  .attr("x", b.t)
-					  .attr("y", textCatBB.height + 35)
-					  .attr("dy", "0.35em")
+					  .attr("y", textCatBB.height + 40)
+					  //.attr("dy", "0.35em")
 					  .attr("text-anchor", "start")
-					  .text(function(d) { return 'Percent: ' + percentFormat(d.value / totalSize); });
-				 */ 
+					  .text(function(d) { return 'Percent: ' + percentFormat(d.value / parentData); });
+				
 				var textBB =  entering.node().getBBox();
-				console.log(textBB);
 				
 				entering.append("svg:rect")
+					.attr('class', 'breadRect')
 				  //.attr("points", breadcrumbPoints)
 				  .attr('y',5)
 				  .attr('width', 125)
 				  .attr('height', textBB.height + 10)
-				  .attr('rx', 15)
-				  .attr('ry', 15)
+				  //.attr('rx', 15)
+				  //.attr('ry', 15)
 				  .style('fill', 'none')
 				  //.style('border-radius', 5)
 				  .style('stroke-width', 4)
 				  .style("stroke", d => color(d.data.name))
-				  .style('fill', d => color(d.data.name))
+				  //.style('fill', d => color(d.data.name))
 				  .style('fill-opacity', 0.4);
 				
 			  // Set position for entering and updating nodes.
@@ -271,7 +274,7 @@ class chart {
 }
 	
 function arcVisible(d) {
-    return d.y1 <= 3 && d.y0 >= 1 && d.x1 > d.x0;
+    return d.y1 <= 5 && d.y0 >= 1 && d.x1 > d.x0;
   }
 
 function labelVisible(d) {
