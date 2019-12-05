@@ -2,7 +2,7 @@ path {
   stroke: #fff;
 }
 
-.sequence {
+.mySIO-sequence {
 	float: right;
 	width: 25%
 }
@@ -14,7 +14,7 @@ text.trail {
 rect.breadRect{
 	stroke-dasharray: 0,200,100;
 }
-.chart {
+.mySIO-Chart {
   float: left;
   width: 75%;
 }

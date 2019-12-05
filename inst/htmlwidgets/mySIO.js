@@ -17,7 +17,8 @@ HTMLWidgets.widget({
 				this.chart = new chart({
 					element: document.getElementById(el.id),
 					data: x.data,
-					options: x.options
+					options: x.options,
+					grouper: x.grouper
 					});
 
       },

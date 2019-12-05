@@ -27,6 +27,7 @@ class chart {
 		this.svg = d3.select(this.element).append('svg')
 			.attr('id', 'chart-' + this.element.id)
 			.attr('class', this.grouper ? this.grouper : 'chart')
+			.attr('class', 'mySIO-Chart')
 		    .attr("viewBox", [0, 0, this.width, this.width])
 			//.on('mouseover', mouseleave)
 		    .style("font", "10px sans-serif");
@@ -37,7 +38,7 @@ class chart {
 		this.sequence = d3.select(this.element).append('svg')
 			.attr('id', 'sequence-' + this.element.id)
 			.attr('height', this.height)
-			.attr('class', 'sequence');
+			.attr('class', 'mySIO-sequence');
 		  
 		this.updateChart(this.data);
 		
@@ -179,7 +180,7 @@ class chart {
 			  
 			var percentFormat = d3.format(",.1%")
 			  
-			  d3.selectAll(".chart")._groups[0].forEach(function(d){
+			  d3.selectAll(".mySIO-Chart")._groups[0].forEach(function(d){
 				  
 				var ids = d.id.split("-")[1];
 				console.log(ids);
