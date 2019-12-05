@@ -132,7 +132,9 @@ class chart {
 		  }
 		  
 		function mouseover(d){
-
+			
+			var current_depth = d.depth;
+			
 			var sequenceArray = d.ancestors().reverse();
 			sequenceArray.shift(); // remove root node from the array
 			//var sequenceNames = [];
@@ -148,13 +150,13 @@ class chart {
 			// Then highlight only those that are an ancestor of the current segment.
 			d3.selectAll("path")
 				.filter(function(node) {
-						  return (sequenceNames.indexOf(node.data.name)>= 0);
+						  return (sequenceNames.indexOf(node.data.name)>= 0 & node.depth <= current_depth);
 						})
 				.style("opacity", 1);
 				
 			
 			
-			updateBreadcrumbs(sequenceNames);
+			updateBreadcrumbs(sequenceNames,current_depth);
 			}
 		function mouseleave(d) {
 				// Hide the breadcrumb trail
@@ -170,7 +172,7 @@ class chart {
 						});
 				}
 			
-		function updateBreadcrumbs(nodeArray) {
+		function updateBreadcrumbs(nodeArray,current_depth) {
 	
 			var b = {
 				w: 125, h: 65, s: 3, t: 10
@@ -192,13 +194,15 @@ class chart {
 				 
 				var sequenceData = svg.selectAll("path")
 					.filter(function(node) {
-						  return (nodeArray.indexOf(node.data.name)>= 0);
+						console.log(node);
+						console.log(node.depth <= node.current.depth);
+						  return (nodeArray.indexOf(node.data.name)>= 0 & node.depth <= current_depth);
 						})
 					.data()
-				
+				console.log(sequenceData);
 				var g = d3.select("#sequence-" + ids)
 				  .selectAll(".trail")
-				  .data(sequenceData);
+				  .data(sequenceData, function(d) { return d.name + d.depth; });
 
 			  // Add breadcrumb and label for entering nodes.
 			  var entering = g.enter()

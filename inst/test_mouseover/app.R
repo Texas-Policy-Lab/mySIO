@@ -46,7 +46,7 @@ server <- function(input, output) {
      dat <- data.frame(
        level1 = rep(c("about a very young person", "better get back to basics"), each=4),
        level2 = paste0(rep(c("a", "b"), each = 4), 1:4),
-       level3 = paste0(rep(c("c", "d"), each = 4), 1:4),
+       level3 = paste0(rep(c("a", "b"), each = 4), 1:4),
        size = rnorm(8, mean = 5, sd = 0.5) * input$bins * c(10,5,2,3,8,6,7,9),
        stringsAsFactors = FALSE
      )
@@ -59,7 +59,7 @@ server <- function(input, output) {
      dat <- data.frame(
        level1 = rep(c("about a very young person", "better get back to basics"), each=4),
        level2 = paste0(rep(c("a", "b"), each = 4), 1:4),
-       level3 = paste0(rep(c("c", "d"), each = 4), 1:4),
+       level3 = paste0(rep(c("a", "b"), each = 4), 1:4),
        size = rnorm(8, mean = 4, sd = 0.5) * input$bins * c(13,2,6,8,1,3,8,12),
        stringsAsFactors = FALSE
      )
