@@ -18,7 +18,9 @@ HTMLWidgets.widget({
 					element: document.getElementById(el.id),
 					data: x.data,
 					options: x.options,
-					grouper: x.grouper
+					grouper: x.grouper,
+					width: width,
+					height: height
 					});
 
       },

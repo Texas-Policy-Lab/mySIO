@@ -6,14 +6,16 @@ class chart {
 	    this.data = opts.data;
 	    this.options = opts.options;
 		this.grouper = opts.grouper;
+		this.width = opts.width;
+		this.height = opts.height;
 	    this.draw();
     }
 	
 	draw() {
 		var that = this;
-		this.width = this.element.offsetWidth;
-		this.height = this.element.offsetHeight;
-		this.margin = this.options.margin;
+		//this.width = this.element.offsetWidth;
+		//this.height = this.element.offsetHeight;
+		//this.margin = this.options.margin;
 		
 		var color = d3.scaleOrdinal()
 			.domain(this.options.names)
@@ -35,11 +37,12 @@ class chart {
 		this.g = this.svg.append("g")
 		    .attr("transform", `translate(${width / 2},${width / 2})`);
 		
+		/*
 		this.sequence = d3.select(this.element).append('svg')
 			.attr('id', 'sequence-' + this.element.id)
 			.attr('height', this.height)
 			.attr('class', 'mySIO-sequence');
-		  
+		 */ 
 		this.updateChart(this.data);
 		
 	}
@@ -87,10 +90,10 @@ class chart {
 			    .attr("d", arc)
 				//.on("click", clicked)
 				.on('mouseover', mouseover);
-
+		/*
 	    path.filter(d => d.children)
 		    .style("cursor", "pointer");
-		
+		*/
 		const parent = this.g.append("circle")
 		  .datum(root)
 		  .attr('class', 'parent-node')
@@ -137,33 +140,47 @@ class chart {
 			
 			var sequenceArray = d.ancestors().reverse();
 			sequenceArray.shift(); // remove root node from the array
+			
+			console.log(sequenceArray);
+			
+			
+			
 			//var sequenceNames = [];
 			var sequenceNames = sequenceArray.map(function(d){
-				var temp = d.data.name;
-				return temp;
+				var pathName = d.data.name;
+				
+				return pathName;
+			});
+			Shiny.onInputChange(that.element.id + "_sequence", sequenceNames);
+			var sequenceLevels = sequenceArray.map(function(d){
+				var columnName = d.data.colname;
+				
+				return columnName;
 			});
 			
 			// Fade all the segments.
-			d3.selectAll("path")
+			that.g.selectAll("path")
 				.style("opacity", 0.4);
 
 			// Then highlight only those that are an ancestor of the current segment.
-			d3.selectAll("path")
+			that.g.selectAll("path")
 				.filter(function(node) {
-						  return (sequenceNames.indexOf(node.data.name)>= 0 & node.depth <= current_depth);
+						  return (sequenceNames.indexOf(node.data.name)>= 0 & 
+						  sequenceLevels.indexOf(node.data.colname) >= 0 &
+						  node.depth <= current_depth);
 						})
 				.style("opacity", 1);
 				
 			
 			
-			updateBreadcrumbs(sequenceNames,current_depth);
+			//updateBreadcrumbs(sequenceNames,current_depth);
 			}
 		function mouseleave(d) {
 				// Hide the breadcrumb trail
 				d3.selectAll(".trail")
 				  .style("visibility", "hidden");
 
-				d3.selectAll("path")
+				that.g.selectAll("path")
 				  .transition()
 				  .duration(200)
 				  .style("opacity", 1)
