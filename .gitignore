@@ -1,3 +1,8 @@
 .Rproj.user
 .Rhistory
 .Rapp.history
+
+.RData
+
+.Rproj.user/
+.Renviron
