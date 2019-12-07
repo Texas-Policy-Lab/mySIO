@@ -21,16 +21,16 @@ class chart {
 			.domain(this.options.names)
 			.range(this.options.color);
 		
-		const width = this.width;
+		var width = Math.min(this.width, this.height);
 		
 		console.log(this.grouper);
 		
 		this.element.innerHTML = '';
 		this.svg = d3.select(this.element).append('svg')
 			.attr('id', 'chart-' + this.element.id)
-			.attr('class', this.grouper ? this.grouper : 'chart')
+			//.attr('class', this.grouper ? this.grouper : 'chart')
 			.attr('class', 'mySIO-Chart')
-		    .attr("viewBox", [0, 0, this.width, this.width])
+		    .attr("viewBox", [0, 0, this.width, this.height])
 			//.on('mouseover', mouseleave)
 		    .style("font", "10px sans-serif");
 

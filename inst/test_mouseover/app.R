@@ -32,9 +32,9 @@ ui <- fluidPage(
       # Show a plot of the generated distribution
       mainPanel(
          column(6,
-                mySIOOutput("first", width = "400px")),
+                shinydashboard::box(mySIOOutput("first", width = "400px"))),
          column(6,
-                mySIOOutput("second")),
+                shinydashboard::box(mySIOOutput("second"))),
          verbatimTextOutput("first_seq")
       )
    )
