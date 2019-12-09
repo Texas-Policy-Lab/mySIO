@@ -35,6 +35,8 @@ class chart {
 		    .style("font", "10px sans-serif");
 
 		this.g = this.svg.append("g")
+			.attr('width', this.width)
+			.attr('height', this.height)
 		    .attr("transform", `translate(${width / 2},${width / 2})`);
 		
 		/*
