@@ -31,7 +31,8 @@ class chart {
 			//.attr('class', this.grouper ? this.grouper : 'chart')
 			.attr('class', 'mySIO-Chart')
 		    .attr('width', this.width)
-			.attr('height', this.height);
+			.attr('height', this.height)
+			.on('click', clickedOff);
 
 		this.g = this.svg.append("g")
 		    .attr('transform','translate('+this.width/2+','+this.height/2+')');
@@ -43,6 +44,24 @@ class chart {
 			.attr('class', 'mySIO-sequence');
 		 */ 
 		this.updateChart(this.data);
+		
+		function clickedOff(){
+			console.log("clickedOff");
+			var sequenceNull = null;
+			Shiny.onInputChange(that.element.id + "_sequence", sequenceNull);
+				// Hide the breadcrumb trail
+				d3.selectAll(".trail")
+				  .style("visibility", "hidden");
+
+				that.g.selectAll("path")
+				  .transition()
+				  .duration(200)
+				  .style("opacity", 1)
+				  .on("end", function() {
+						  d3.select(this).on("mouseover", mouseover);
+						});
+		
+		}
 		
 	}
 	
@@ -101,7 +120,6 @@ class chart {
 		  .attr("pointer-events", "all")
 		  //.on("click", clicked)
 		  .on('mouseover', mouseleave);
-		 
 		
 		this.totalSize = path.node().__data__.value;
 		this.parentSize = parent.node().__data__.value;
@@ -132,6 +150,9 @@ class chart {
 				.attrTween("d", d => () => arc(d.current));
 			
 		  }
+
+		
+		
 		  
 		function mouseover(d){
 			
