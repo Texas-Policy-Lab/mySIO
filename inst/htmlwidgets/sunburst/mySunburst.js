@@ -182,6 +182,9 @@ class chart {
 			//updateBreadcrumbs(sequenceNames,current_depth);
 			}
 		function mouseleave(d) {
+			console.log("mouseleave");
+			var sequenceNull = null;
+			Shiny.onInputChange(that.element.id + "_sequence", sequenceNull);
 				// Hide the breadcrumb trail
 				d3.selectAll(".trail")
 				  .style("visibility", "hidden");
