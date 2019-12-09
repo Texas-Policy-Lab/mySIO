@@ -21,7 +21,7 @@ class chart {
 			.domain(this.options.names)
 			.range(this.options.color);
 		
-		var width = Math.min(this.width, this.height);
+		var width = this.width;
 		
 		console.log(this.grouper);
 		
@@ -30,14 +30,11 @@ class chart {
 			.attr('id', 'chart-' + this.element.id)
 			//.attr('class', this.grouper ? this.grouper : 'chart')
 			.attr('class', 'mySIO-Chart')
-		    .attr("viewBox", [0, 0, this.width, this.height])
-			//.on('mouseover', mouseleave)
-		    .style("font", "10px sans-serif");
+		    .attr('width', this.width)
+			.attr('height', this.height);
 
 		this.g = this.svg.append("g")
-			.attr('width', this.width)
-			.attr('height', this.height)
-		    .attr("transform", `translate(${width / 2},${width / 2})`);
+		    .attr('transform','translate('+this.width/2+','+this.height/2+')');
 		
 		/*
 		this.sequence = d3.select(this.element).append('svg')
@@ -58,7 +55,7 @@ class chart {
 			.domain(this.options.names)
 			.range(this.options.color);
 		
-		const radius = this.width / 8;
+		const radius = Math.min(this.width, this.height) / 10;
 		
 		const arc = d3.arc()
 			.startAngle(d => d.x0)
@@ -145,20 +142,26 @@ class chart {
 			
 			console.log(sequenceArray);
 			
-			
-			
-			//var sequenceNames = [];
+			//sequence info and Shiny inputs
 			var sequenceNames = sequenceArray.map(function(d){
 				var pathName = d.data.name;
 				
 				return pathName;
 			});
+			
 			Shiny.onInputChange(that.element.id + "_sequence", sequenceNames);
+			
 			var sequenceLevels = sequenceArray.map(function(d){
 				var columnName = d.data.colname;
 				
 				return columnName;
 			});
+			
+			var sequencePosition = sequenceArray.map(function(d){
+				var size = d.value;
+				return size;
+			});
+			Shiny.onInputChange(that.element.id + "_data", sequencePosition);
 			
 			// Fade all the segments.
 			that.g.selectAll("path")
@@ -169,6 +172,7 @@ class chart {
 				.filter(function(node) {
 						  return (sequenceNames.indexOf(node.data.name)>= 0 & 
 						  sequenceLevels.indexOf(node.data.colname) >= 0 &
+						  sequencePosition.indexOf(node.value) >= 0 &
 						  node.depth <= current_depth);
 						})
 				.style("opacity", 1);
@@ -291,7 +295,9 @@ class chart {
 		  
 	}
 	
-	resize(){
+	resize(width, height){
+		this.width = width;
+		this.height = height;
 		this.draw()
 	}
 	

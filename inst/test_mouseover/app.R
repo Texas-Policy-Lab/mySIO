@@ -71,7 +71,7 @@ server <- function(input, output) {
 
    observeEvent(input$first_sequence,{
      output$first_seq <- renderText({
-       input$first_sequence
+       input$first_data
      })
    })
 }
