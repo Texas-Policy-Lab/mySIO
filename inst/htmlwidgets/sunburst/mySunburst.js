@@ -1,4 +1,4 @@
-class chart {
+class chartSB {
 	
 	constructor(opts) {
 		console.log(opts);

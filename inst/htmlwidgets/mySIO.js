@@ -14,7 +14,7 @@ HTMLWidgets.widget({
         // general chart with layers
 
 				console.log(x);
-				this.chart = new chart({
+				this.chartSB = new chartSB({
 					element: document.getElementById(el.id),
 					data: x.data,
 					options: x.options,
@@ -27,8 +27,8 @@ HTMLWidgets.widget({
 
       resize: function(width, height) {
 		//chart will use its own resize method
-        if(this.chart) {
-			this.chart.resize(width, height);
+        if(this.chartSB) {
+			this.chartSB.resize(width, height);
 		}
 
       }
