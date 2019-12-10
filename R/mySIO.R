@@ -5,10 +5,12 @@
 #' @import htmlwidgets
 #'
 #'@param data a nested data object (see d3r library)
+#'@param categories a vector of categories that will be used to distinguish each portion
 #'@param color a vector of colors for sunburst chart
+#'@param radius a number that acts as the divider over the width/height to determine the radius
 #'
 #' @export
-mySIO <- function(data, categories, grouper = NULL, color = NULL, width = NULL, height = NULL, elementId = NULL) {
+mySIO <- function(data, categories, grouper = NULL, color = NULL, radius= NULL, width = NULL, height = NULL, elementId = NULL) {
 
   if(is.null(color)){
     color <- colorRampPalette(RColorBrewer::brewer.pal(min(10, length(categories)), 'RdYlBu'))
@@ -16,11 +18,16 @@ mySIO <- function(data, categories, grouper = NULL, color = NULL, width = NULL, 
     color <- color(length(categories))
   }
 
+  if(is.null(radius)){
+    radius <- ifelse(length(categories) > 10,8,10)
+  }
+
   # forward options using x
   x = list(
    data = data,
    options = list(color = color,
-                  names = categories),
+                  names = categories,
+                  radius = radius),
    grouper = grouper
   )
 

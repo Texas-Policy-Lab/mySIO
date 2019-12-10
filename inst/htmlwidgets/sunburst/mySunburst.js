@@ -23,8 +23,6 @@ class chartSB {
 		
 		var width = this.width;
 		
-		console.log(this.grouper);
-		
 		this.element.innerHTML = '';
 		this.svg = d3.select(this.element).append('svg')
 			.attr('id', 'chart-' + this.element.id)
@@ -46,7 +44,7 @@ class chartSB {
 		this.updateChart(this.data);
 		
 		function clickedOff(){
-			console.log("clickedOff");
+			
 			var sequenceNull = null;
 			Shiny.onInputChange(that.element.id + "_sequence", sequenceNull);
 				// Hide the breadcrumb trail
@@ -74,7 +72,7 @@ class chartSB {
 			.domain(this.options.names)
 			.range(this.options.color);
 		
-		const radius = Math.min(this.width, this.height) / 10;
+		const radius = Math.min(this.width, this.height) / this.options.radius;
 		
 		const arc = d3.arc()
 			.startAngle(d => d.x0)
@@ -97,7 +95,6 @@ class chartSB {
 
 		root.each(d => d.current = d);
 		
-		console.log(root.descendants());
 		const path = this.g.append("g")
 			.selectAll("path")
 			.data(root.descendants())
@@ -120,6 +117,9 @@ class chartSB {
 		  .attr("pointer-events", "all")
 		  //.on("click", clicked)
 		  .on('mouseover', mouseleave);
+		
+		parent.append('title')
+			.text("Hover over the circles from the inside out")
 		
 		this.totalSize = path.node().__data__.value;
 		this.parentSize = parent.node().__data__.value;
