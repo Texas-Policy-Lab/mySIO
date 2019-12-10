@@ -53,7 +53,14 @@ server <- function(input, output) {
      )
 
      tree <- d3_nest(dat, value_cols = 'size')
-     mySIO(data = tree, categories =  c("a", "b", dat$level2, dat$level3), grouper = "mine", width = "650px")
+
+     color_palette <- colorRampPalette(RColorBrewer::brewer.pal(8, 'Reds'))
+     color_palette <- color_palette(length(c("a", "b", dat$level2, dat$level3)))
+     mySIO(data = tree,
+           color = color_palette,
+           categories =  c("a", "b", dat$level2, dat$level3),
+           grouper = "mine",
+           width = "650px")
    })
 
    output$second <- renderMySIO({
