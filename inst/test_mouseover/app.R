@@ -32,9 +32,19 @@ ui <- fluidPage(
       # Show a plot of the generated distribution
       mainPanel(
          column(6,
-                shinydashboard::box(mySIOOutput("first", width = "400px"))),
+                shinydashboard::box(
+                   mySIOOutput("first",
+                               width = "100%"),
+                   width = "100%"
+                )
+         ),
          column(6,
-                shinydashboard::box(mySIOOutput("second"))),
+                shinydashboard::box(
+                   mySIOOutput("second",
+                               width = "100%"),
+                   width = "100%"
+                )
+      ),
          verbatimTextOutput("first_seq")
       )
    )
@@ -59,7 +69,7 @@ server <- function(input, output) {
      mySIO(data = tree,
            color = color_palette,
            categories =  c("a", "b", dat$level2, dat$level3),
-           grouper = "mine",
+
            width = "650px")
    })
 
@@ -73,7 +83,10 @@ server <- function(input, output) {
      )
 
      tree <- d3_nest(dat, value_cols = 'size')
-     mySIO(data = tree, categories =  c("a", "b", dat$level2, dat$level3), grouper = "notmine",width = "650px")
+     mySIO(data = tree,
+           categories =  c("a", "b", dat$level2, dat$level3),
+
+           width = "650px")
    })
 
    observeEvent(input$first_sequence,{
