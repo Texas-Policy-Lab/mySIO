@@ -224,6 +224,10 @@ class chartSB {
 			var sequenceArray = d.ancestors().reverse();
 			sequenceArray.shift(); // remove root node from the array
 			
+			var ancestors = getAncestors(d);
+			
+			
+			
 			//sequence info and Shiny inputs
 			var sequenceNames = sequenceArray.map(function(d){
 				var pathName = d.data.name;
@@ -262,29 +266,37 @@ class chartSB {
 			// Then highlight only those that are an ancestor of the current segment.
 			that.g.selectAll("path")
 				.filter(function(node) {
+						return (ancestors.indexOf(node) >= 0);
+						  /*
 						  return (sequenceNames.indexOf(node.data.name)>= 0 & 
 						  sequenceLevels.indexOf(node.data.colname) >= 0 &
 						  sequencePosition.indexOf(node.value) >= 0 &
 						  node.depth <= current_depth);
+						  */
 						})
 				.style("opacity", 1);
 				
 			that.g.selectAll(".hover-circle")
 				.filter(function(node) {
+						  return (ancestors.indexOf(node) >= 0);
+						  /*
 						  return (sequenceNames.indexOf(node.data.name)>= 0 & 
 						  sequenceLevels.indexOf(node.data.colname) >= 0 &
 						  sequencePosition.indexOf(node.value) >= 0 &
 						  node.depth <= current_depth);
+						  */
 						})
 				.style("opacity", 1);
 				
 			that.g.selectAll('.arc').selectAll("text")
 				.filter(function(node) {
-						console.log(node);
+						  return (ancestors.indexOf(node) >= 0);
+						  /*
 						  return (sequenceNames.indexOf(node.data.name)>= 0 & 
 						  sequenceLevels.indexOf(node.data.colname) >= 0 &
 						  sequencePosition.indexOf(node.value) >= 0 &
 						  node.depth <= current_depth);
+						  */
 						})
 				.style("opacity", 1);
 			
