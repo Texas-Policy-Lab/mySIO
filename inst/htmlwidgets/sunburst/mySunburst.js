@@ -62,18 +62,24 @@ class chartSB {
 						  d3.select(this).on("mouseover", mouseover);
 						});
 				
-				that.g.selectAll("circle")
-				  .style("opacity", 0)
-				  .on("end", function() {
+				that.g.selectAll(".hover-circle")
+					.style("opacity", 0)
+					.on("end", function() {
 						  d3.select(this).on("mouseover", mouseover);
 						});
-						
+							
 				that.g.selectAll("text")
 				  .style("opacity", 0)
 				  .on("end", function() {
 						  d3.select(this).on("mouseover", mouseover);
 						});
 				that.g.selectAll('.parent-label').style("opacity", 0);
+				
+				that.g.selectAll(".parent-hover-circle")
+					.style("opacity", 0)
+					.on("end", function() {
+						  d3.select(this).on("mouseover", mouseover);
+						});
 		}
 		
 	}
@@ -130,6 +136,7 @@ class chartSB {
 				.attr("transform", function (d) { 
 					return "translate(" + arc.centroid(d) + ")"; 
 				})
+				.attr('class', 'hover-circle')
 				.attr("dy", ".35em")
 				.attr("r", 10)
 				.style('opacity', 0)
@@ -162,13 +169,22 @@ class chartSB {
 		  //.on("click", clicked)
 		  .on('mouseover', mouseleave);
 		  
-		 this.g.append("svg:text")
+		this.g.append("circle")
+			.attr('class', 'parent-hover-circle')
+			.attr("dy", ".35em")
+			.attr("r", 10)
+			.style('opacity', 0)
+			.style("fill", "white")
+			.style('stroke', "lightgray")
+			.style('stroke-width', 2);
+		
+		this.g.append("svg:text")
 			.attr('class', 'parent-label')
 			.style('opacity', 0)
 			.style('color', 'gray')
 			.attr("text-anchor", "middle")
 			.attr("dy", ".35em")
-			.attr("dx", "-.25em")
+			//.attr("dx", ".25em")
 			.text("1")
 		
 		this.totalSize = arcs.node().__data__.value;
@@ -237,7 +253,10 @@ class chartSB {
 			that.g.selectAll("text")
 				.style("opacity", 0);
 				
-			that.g.selectAll("circle")
+			that.g.selectAll(".hover-circle")
+				.style("opacity", 0);
+			
+			that.g.selectAll(".parent-hover-circle")
 				.style("opacity", 0);
 
 			// Then highlight only those that are an ancestor of the current segment.
@@ -250,7 +269,7 @@ class chartSB {
 						})
 				.style("opacity", 1);
 				
-			that.g.selectAll("circle")
+			that.g.selectAll(".hover-circle")
 				.filter(function(node) {
 						  return (sequenceNames.indexOf(node.data.name)>= 0 & 
 						  sequenceLevels.indexOf(node.data.colname) >= 0 &
@@ -261,6 +280,7 @@ class chartSB {
 				
 			that.g.selectAll('.arc').selectAll("text")
 				.filter(function(node) {
+						console.log(node);
 						  return (sequenceNames.indexOf(node.data.name)>= 0 & 
 						  sequenceLevels.indexOf(node.data.colname) >= 0 &
 						  sequencePosition.indexOf(node.value) >= 0 &
@@ -269,6 +289,9 @@ class chartSB {
 				.style("opacity", 1);
 			
 			that.g.selectAll('.parent-label').style("opacity", 1);
+			
+			that.g.selectAll(".parent-hover-circle")
+				.style("opacity", 1);
 			
 			//updateBreadcrumbs(sequenceNames,current_depth);
 			}
