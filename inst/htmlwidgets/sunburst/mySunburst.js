@@ -224,10 +224,6 @@ class chartSB {
 			var sequenceArray = d.ancestors().reverse();
 			sequenceArray.shift(); // remove root node from the array
 			
-			var ancestors = getAncestors(d);
-			
-			
-			
 			//sequence info and Shiny inputs
 			var sequenceNames = sequenceArray.map(function(d){
 				var pathName = d.data.name;
